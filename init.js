@@ -9,9 +9,10 @@ app.use('/js',express.static(__dirname + '/js'));
 app.use('/images',express.static(__dirname + '/images'));
 
 app.get('/', function(req, res){
-  res.sendFile('/index.html');
+  res.sendFile('/merryCard.html');
 });
 
-app.listen(3000,function(){
-	console.log('app listen on port 3000');
+var port = process.env.PORT || 3000;
+app.listen(port, function() {
+	console.log('app listen on port' + port);
 });

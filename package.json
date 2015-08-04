@@ -1,0 +1,18 @@
+{
+  "name": "invitationCard",
+  "version": "1.0.0",
+  "description": "invitation Card",
+  "main": "init.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "qianleyi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.x"
+  },
+  "engines":{
+    "node":"0.12.x",
+    "npm":"2.5.x"
+  }
+}

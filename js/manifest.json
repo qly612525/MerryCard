@@ -1,0 +1,26 @@
+ {
+ 	"manifest" : [
+ 		{
+			"src":"images/fg.jpg",
+			"id":"image_fg"
+		},{
+			"src":"images/bg.jpg",
+			"id":"image_bg"
+		},{
+			"src":"images/stroke.png",
+			"id":"image_stroke"
+		},{
+			"src":"images/39.jpg",
+			"id":"image_3"
+		},{
+			"src":"images/99.jpg",
+			"id":"image_1"
+		},{
+			"src":"images/205.jpg",
+			"id":"image_2"
+		},{
+			"src":"images/216.jpg",
+			"id":"image_4"
+		}
+ 	]
+ }

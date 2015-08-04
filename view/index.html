@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0,maximum-scale=1.0, user-scalable=no">
+
+	<title>Invitation Card</title>
+
+	<script type="text/javascript" src="../lib/zepto.min.js"></script>
+	<script type="text/javascript" src="../lib/easeljs.min.js"></script>
+	<script type="text/javascript" src="../lib/preloadjs.min.js"></script>
+	<script type="text/javascript" src="../lib/tweenjs.min.js"></script>
+
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html,body {
+			width: 100%;
+			height: 100%;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+
+	<script type="text/javascript">
+		(function() {
+			// console.log(window);
+			// console.log($(window).width());
+			// console.log($(window).height());
+			var deviceWidth = document.documentElement.clientWidth;
+			var deviceHeight = document.documentElement.clientHeight;
+			$('#canvas').width(deviceWidth);
+			$('#canvas').height(deviceHeight);
+			$('#canvas').attr('width',deviceWidth);
+			$('#canvas').attr('height',deviceHeight);
+
+			var stage = new createjs.Stage(document.getElementById('canvas'));
+			var manifest = [
+				{
+					src:'images/fg.jpg',
+					id:'fg'
+				},{
+					src:'images/bg.jpg',
+					id:'bg'
+				},{
+					src:'images/stroke.png',
+					id:'stroke'
+				}];
+
+			//bg 色彩
+			var bgContainer = new createjs.Container();
+			stage.addChild(bgContainer);
+
+			//fg 容器
+			var imgContaniner = new createjs.Container();
+			imgContaniner.setBounds(0,0,200,380);
+			imgContaniner.x = deviceWidth / 2 - 100;
+			imgContaniner.y = 50;
+			stage.addChild(imgContaniner);
+
+			//fg 文字容器
+			var fgWordContainer = new createjs.Container();
+			fgWordContainer.setBounds(0,0,150,50);
+			fgWordContainer.x = deviceWidth / 2 - fgWordContainer.getBounds().width/2;
+			fgWordContainer.y = 450;
+			fgWordContainer.alpha = 0;
+			stage.addChild(fgWordContainer);
+			//fg 文字容器 字体
+			var text1 = new createjs.Text("钱乐毅","20px Arial","#FFFFFF");
+			text1.x = 0;
+			fgWordContainer.addChild(text1);
+
+			var text2 = new createjs.Text("李静怡","20px Arial","#FFFFFF");
+			var bt = text2.getBounds();
+			text2.x = fgWordContainer.getBounds().width - bt.width;
+			fgWordContainer.addChild(text2);
+
+			//fg 文字容器 爱心
+			//anchor
+			var anchorPointX = fgWordContainer.getBounds().width/2;
+			var anchorPointY = 0;
+			//绘制
+			var loveGraphic = new createjs.Shape();
+			loveGraphic.graphics.s("#FC168A").f("#F86969").moveTo(0,5).bezierCurveTo(3,-2,15,7,6,15).bezierCurveTo(10,10,5,15,0,20).bezierCurveTo(-5,15,-10,10,-6,15).bezierCurveTo(-15,7,-3,-2,0,5).closePath();
+			loveGraphic.x = anchorPointX;
+			loveGraphic.y = anchorPointY;
+			fgWordContainer.addChild(loveGraphic);
+
+
+			//fg 日期地址容器 
+			var fgDateContainer = new createjs.Container();
+			fgDateContainer.setBounds(0,0,150,50);
+			fgDateContainer.x = deviceWidth / 2 - fgDateContainer.getBounds().width/2;
+			fgDateContainer.y = 480;
+			fgDateContainer.alpha = 0;
+			stage.addChild(fgDateContainer);
+
+			//fg 日期
+			var textDate = new createjs.Text("2015年 10月2日","15px Arial","#FFFFFF");
+			textDate.x = 25;
+			fgDateContainer.addChild(textDate);
+
+			var textAddress = new createjs.Text("天下春花园酒店","15px Arial","#FFFFFF");
+			textAddress.x = 24;
+			textAddress.y = 20;
+			fgDateContainer.addChild(textAddress);
+
+			function startPreload() {
+				preload = new createjs.LoadQueue(true);
+			    //preload.installPlugin(createjs.Sound);          
+			    preload.on("fileload", handleFileLoad);
+			    preload.on("progress", handleFileProgress);
+			    preload.on("complete", loadComplete);
+			    preload.on("error", loadError);
+			    preload.loadManifest(manifest);
+			}
+
+			function handleFileLoad(event) {
+			    console.log("A file has loaded of type: " + event.item.type);
+			    if (event.item.id == "bg") {
+			    	var bitmap = new createjs.Bitmap(event.result);
+			    	if (deviceWidth > deviceHeight) {
+			    		bitmap.scaleX = deviceWidth / 680;
+			    		bitmap.scaleY = ((deviceWidth * 453) / 680) / 453;
+			    	} else {
+						bitmap.scaleX = ((deviceHeight * 680) / 453) / 680;
+			    		bitmap.scaleY = deviceHeight / 453;
+			    	}
+			    	
+			    	bgContainer.addChild(bitmap);
+
+			    }
+			    if(event.item.id == "fg"){
+			        console.log("fg is loaded");
+			        //image pic
+					var bitmap = new createjs.Bitmap(event.result);
+					bitmap.cache(0,0,360,640);
+					bitmap.scaleX = 0.55;
+					bitmap.scaleY = 0.55;
+
+					//img mask
+			        var star = new createjs.Shape();
+			        star.graphics.drawEllipse(0,0,200,350);
+			        bitmap.mask = star;
+
+			        imgContaniner.alpha = 0;
+			        imgContaniner.addChild(bitmap);	
+
+			        //fg word
+			        var rect = new createjs.Shape();
+			        rect.graphics.rect(0,0,bt.width,bt.height);
+			        fgWordContainer.addChild(rect);
+
+			        createjs.Tween.get(imgContaniner).to({alpha:1},4000);
+			        createjs.Tween.get(fgWordContainer).wait(2000).to({alpha:1},4000);
+			        createjs.Tween.get(fgDateContainer).wait(4000).to({alpha:1},6000);  
+
+			        createjs.Ticker.addEventListener("tick", handlerTicker);
+			        createjs.Ticker.setFPS(5);
+			    }
+			    if (event.item.id == "stroke") {
+			    	var strokeImg = new createjs.Bitmap(event.result);
+			    	strokeImg.x = -30;
+			    	strokeImg.y = -18;
+					imgContaniner.addChild(strokeImg); 
+			    }
+			}
+
+			function loadError(evt) {
+			    console.log("Error!",evt.text);
+			}
+
+			function handleFileProgress(event) {
+			    console.log((preload.progress*100|0) + " % Loaded");
+			    //stage.update();
+			}
+
+			function loadComplete(event) {
+			    console.log("Finished Loading Assets");
+			}
+
+			function handlerTicker(event) {
+				stage.update(event);
+			}
+
+			startPreload();
+		})();
+	</script>
+</body>
+</html>
